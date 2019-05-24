@@ -1,6 +1,7 @@
 package com.vdel;
 
 import com.vdel.generator.CarteGenerator;
+import com.vdel.generator.CarteGenerator.Tile;
 import com.vdel.utils.YamUtils;
 
 import java.util.HashMap;
@@ -15,15 +16,24 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Integer[][] carte = CarteGenerator.generateCarte();
+        Tile[][] carte = CarteGenerator.generateCarte();
 
         for(int y = 0; y < HAUTEUR; y ++){
             for(int x = 0; x < LARGEUR; x++){
-                if(carte[y][x] == 0){
-                    System.out.print("~");
-                }
-                else {
-                    System.out.print(".");
+                switch (carte[y][x]){
+
+                    case SEA:
+                        System.out.print("~");
+                        break;
+                    case EARTH:
+                        System.out.print(".");
+                        break;
+                    case TOWN:
+                        System.out.print("X");
+                        break;
+                    case FOREST:
+                        System.out.print("o");
+                        break;
                 }
             }
             System.out.println();
