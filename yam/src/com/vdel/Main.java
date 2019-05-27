@@ -1,26 +1,25 @@
 package com.vdel;
 
-import com.vdel.generator.CarteGenerator;
-import com.vdel.generator.CarteGenerator.Tile;
 import com.vdel.utils.YamUtils;
+import com.vdel.world.Carte;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static com.vdel.Carte.HAUTEUR;
-import static com.vdel.Carte.LARGEUR;
+import static com.vdel.world.Carte.HAUTEUR;
+import static com.vdel.world.Carte.LARGEUR;
 
 public class Main {
 
-    public static void main(String[] args) {
 
-        Tile[][] carte = CarteGenerator.generateCarte();
+
+    public static void main(String[] args) {
 
         for(int y = 0; y < HAUTEUR; y ++){
             for(int x = 0; x < LARGEUR; x++){
-                switch (carte[y][x]){
+                switch (Carte.INSTANCE.getZone(x,y).getTile()){
 
                     case SEA:
                         System.out.print("~");
@@ -85,6 +84,6 @@ public class Main {
         in.close();
 
 
-        Universe.start();
+        //Universe.start();
     }
 }
