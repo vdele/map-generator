@@ -4,17 +4,27 @@ import static com.vdel.world.tile.Zone.Tile.FOREST;
 
 public class Forest extends Zone {
     @Override
-    String getZoneName() {
+    public String getZoneName() {
         return "FORET";
     }
 
     @Override
-    Integer getVisibilite() {
-        return 80;
+    public Integer getVisibilite() {
+        return 20;
     }
 
     @Override
     public Tile getTile() {
         return FOREST;
+    }
+
+    @Override
+    public Integer getHabitationPercentage() {
+        return 2;
+    }
+
+    @Override
+    public Integer getHabitationMaximum() {
+        return 4;
     }
 }

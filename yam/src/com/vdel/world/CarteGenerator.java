@@ -3,9 +3,11 @@ package com.vdel.world;
 import com.vdel.Orientation;
 import com.vdel.utils.YamUtils;
 import com.vdel.world.tile.*;
+import com.vdel.world.tile.Zone.Tile;
 
 import static com.vdel.world.Carte.HAUTEUR;
 import static com.vdel.world.Carte.LARGEUR;
+import static com.vdel.world.tile.Zone.Tile.*;
 
 
 public class CarteGenerator {
@@ -22,12 +24,12 @@ public class CarteGenerator {
 
         for(int y = 0; y < HAUTEUR; y++){
             for(int x = 0; x < LARGEUR; x++){
-                carte.setZone(x,y,new Sea());
+                carte.setZone(Coord.valueOf(x,y),new Sea());
             }
         }
     }
 
-    private static void pickSmallZone(Carte carte,Integer nbPick, Zone tile){
+    private static void pickSmallZone(Carte carte,Integer nbPick, Tile tile){
         for(int i = 0; i < nbPick; i++){
             initTileZone(carte,YamUtils.randomNumber(2,3),tile,YamUtils.randomNumber(2,4));
         }
@@ -35,32 +37,27 @@ public class CarteGenerator {
 
     private static void generateTown(Carte carte) {
 
-        initTileZone(carte,YamUtils.randomNumber(5,10),new Town(),YamUtils.randomNumber(2,4));
+        initTileZone(carte,YamUtils.randomNumber(5,10),TOWN,YamUtils.randomNumber(2,4));
 
-        pickSmallZone(carte,5,new Town());
+        pickSmallZone(carte,5,TOWN);
     }
     private static void generateForest(Carte carte) {
 
-        pickSmallZone(carte,5,new Forest());
+        pickSmallZone(carte,5,FOREST);
     }
 
     private static void generateEarth(Carte carte) {
 
 
-        initTileZone(carte,YamUtils.randomNumber(25, 30), 30, 20,new Earth(),YamUtils.randomNumber(15, 20));
-        initTileZone(carte,YamUtils.randomNumber(15, 20), 30, 20,new Earth(),YamUtils.randomNumber(10, 20));
-        initTileZone(carte,YamUtils.randomNumber(8, 10),new Earth(),YamUtils.randomNumber(10, 20));
-        initTileZone(carte,YamUtils.randomNumber(8, 10),new Earth(),YamUtils.randomNumber(10, 20));
+        initTileZone(carte,YamUtils.randomNumber(25, 30), EARTH,YamUtils.randomNumber(15, 20));
+        initTileZone(carte,YamUtils.randomNumber(15, 20),EARTH,YamUtils.randomNumber(10, 20));
+        initTileZone(carte,YamUtils.randomNumber(8, 10),EARTH,YamUtils.randomNumber(10, 20));
+        initTileZone(carte,YamUtils.randomNumber(8, 10),EARTH,YamUtils.randomNumber(10, 20));
     }
 
 
 
-    private static void initTileZone(Carte carte,Integer rayon, Zone tile, Integer longueurTrace) {
-        initTileZone(carte,rayon, 0, 0, tile,longueurTrace);
-    }
-
-    private static void initTileZone(Carte carte,Integer rayon, Integer margeDeDepartX, Integer margeDeDepartY, Zone zone, Integer longueurTrace) {
-
+    private static void initTileZone(Carte carte,Integer rayon, Tile tile, Integer longueurTrace) {
 
 
         Orientation orientation = null;
@@ -75,32 +72,35 @@ public class CarteGenerator {
                     startX = YamUtils.randomNumber(0 , LARGEUR - 1);
                     startY = YamUtils.randomNumber(0, HAUTEUR - 1 );
                 }
-                while(zone.getTile().getLevel() - carte.getZone(startX,startY).getTile().getLevel() != 1);
+                while(tile.getLevel() - carte.getZone(Coord.valueOf(startX,startY)).getTile().getLevel() != 1);
                 orientation = Orientation.randomOrientation();
             } else {
                 Orientation[] possibleOrientations = orientation.getPossibleOrientations();
                 orientation = possibleOrientations[YamUtils.randomNumber(0, possibleOrientations.length - 1)];
 
-                startX = startX + orientation.getVariationX();
-                startY = startY + orientation.getVariationY();
+                startX = startX + orientation.getVariation().getX();
+                startY = startY + orientation.getVariation().getY();
             }
 
-            drawCircle(carte,startX, startY, rayon, zone);
+            drawCircle(carte,Coord.valueOf(startX, startY), rayon, tile);
 
         }
 
         // rac((xb - xa)² + (yb - ya)²)
     }
 
-    private static void drawCircle(Carte carte,Integer startX, Integer startY, Integer rayon, Zone zone) {
-        for (int y = startY - rayon; y <= startY + rayon; y++) {
+    private static void drawCircle(Carte carte,Coord center, Integer rayon, Tile tile) {
+        for (int y = center.getY() - rayon; y <= center.getY() + rayon; y++) {
             if (y >= 0 && y < HAUTEUR)
-                for (int x = startX - rayon; x <= startX + rayon; x++) {
+                for (int x = center.getX() - rayon; x <= center.getX() + rayon; x++) {
                     if (x >= 0 && x < LARGEUR) {
-                        Double distance = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+                        Double distance = Math.sqrt(Math.pow(x - center.getX(), 2) + Math.pow(y - center.getY(), 2));
                         if (distance <= rayon) {
-                            if(zone.getTile().getLevel() - carte.getZone(x,y).getTile().getLevel() == 1) {
-                                carte.setZone(x,y,zone);
+                            if(tile.getLevel() - carte.getZone(Coord.valueOf(x,y)).getTile().getLevel() == 1) {
+                                Zone zone = tile.instantiateZone();
+
+                                carte.setZone(Coord.valueOf(x,y),zone);
+                                carte.addPopulation(zone.getHabitants());
                             }
                         }
                     }

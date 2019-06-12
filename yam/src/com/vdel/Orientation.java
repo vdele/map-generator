@@ -1,6 +1,7 @@
 package com.vdel;
 
 import com.vdel.utils.YamUtils;
+import com.vdel.world.Coord;
 
 import java.util.Arrays;
 
@@ -39,7 +40,11 @@ public enum Orientation {
                 Orientation.values()[(getIndex() + 1)%Orientation.values().length]};
     }
 
-    public Integer getVariationX(){
+    public Coord getVariation(){
+        return Coord.valueOf(getVariationX(),getVariationY());
+    }
+
+    private Integer getVariationX(){
         if(Arrays.asList(NORD_OUEST,OUEST,SUD_OUEST).contains(this)){
             return -1;
         }
@@ -49,7 +54,7 @@ public enum Orientation {
         return 0;
     }
 
-    public Integer getVariationY(){
+    private Integer getVariationY(){
         if(Arrays.asList(NORD_OUEST,NORD,NORD_EST).contains(this)){
             return -1;
         }
@@ -58,4 +63,5 @@ public enum Orientation {
         }
         return 0;
     }
+
 }

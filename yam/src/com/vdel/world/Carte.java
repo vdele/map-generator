@@ -1,46 +1,68 @@
 package com.vdel.world;
 
-import com.vdel.world.tile.Sea;
+import com.vdel.Personne;
 import com.vdel.world.tile.Zone;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 public class Carte {
 
     public static final Integer HAUTEUR = 60;
     public static final Integer LARGEUR = 90;
 
-    public static final Carte INSTANCE = new Carte();
+    protected static final Carte INSTANCE = new Carte();
 
-    // private List<List<Zone>> carte = null;
-    private Zone[][] carte = null;
+    private Set<Personne> population;
+
+   // private Zone[][] carte = null;
+    private Map<Coord,Zone> carte = null;
 
     private Carte(){
-        carte = new Zone[HAUTEUR][LARGEUR];
-
-
+        carte = new HashMap<>();
 
         CarteGenerator.generateCarte(this);
+    }
 
-
+    public Map<Coord,Zone> getCarte(){
+        return carte;
     }
 
 
-    public Zone getZone(Integer X, Integer Y){
-        return carte[Y][X];
+    public Zone getZone(Coord coord){
+        return carte.get(coord);
+    }
+    public Zone getZone(Integer x, Integer y){
+        return getZone(Coord.valueOf(x,y));
     }
 
-    public void setZone(Integer X, Integer Y, Zone z){
-       /* if(getZone(X,Y) == null){
-            carte.get(Y).add(X,z);
+    public void setZone(Coord coord, Zone z){
+
+       carte.put(coord,z);
+
+       z.setCoord(coord);
+
+    }
+
+    public Set<Personne> getPopulation(){
+        return population;
+    }
+
+    public void addPopulation(Personne p){
+        if(p!= null){
+            if(population == null){
+                population = new HashSet<>();
+            }
+            population.add(p);
         }
-        else{
-            carte.get(Y).set(X,z);
-        }*/
-
-       carte[Y][X] = z;
-
+    }
+    public void addPopulation(Collection<Personne> p){
+        if(p!= null){
+            if(population == null){
+                population = new HashSet<>();
+            }
+            population.addAll(p);
+        }
     }
 
 }

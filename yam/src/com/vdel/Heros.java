@@ -1,10 +1,13 @@
 package com.vdel;
 
 
-public class Heros<T extends Peuple> {
+import com.vdel.world.Coord;
+
+public class Heros {
 
     private String name;
     private Integer niveau;
+    private Coord coord;
 
 
     public String getName() {
@@ -23,11 +26,15 @@ public class Heros<T extends Peuple> {
         this.niveau = niveau;
     }
 
-    public Heros(String name, Peuple peuple){
-        this.name = name;
+    public Heros(){
         this.niveau = 1;
     }
 
+    public Coord getCoord() {
+        return coord;
+    }
 
-
+    public void setCoord(Coord coord) {
+        this.coord = coord;
+    }
 }

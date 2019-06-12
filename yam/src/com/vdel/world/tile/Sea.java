@@ -17,12 +17,22 @@ public class Sea extends Zone {
 
     @Override
     public Integer getVisibilite() {
-        return 10;
+        return 90;
     }
 
     @Override
     public Tile getTile() {
         return SEA;
+    }
+
+    @Override
+    public Integer getHabitationPercentage() {
+        return 0;
+    }
+
+    @Override
+    public Integer getHabitationMaximum() {
+        return 0;
     }
 
     @Override

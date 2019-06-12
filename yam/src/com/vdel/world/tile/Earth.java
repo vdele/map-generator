@@ -7,17 +7,27 @@ public class Earth extends Zone {
 
 
     @Override
-    String getZoneName() {
+    public String getZoneName() {
         return "PLAINE";
     }
 
     @Override
-    Integer getVisibilite() {
-        return 30;
+    public Integer getVisibilite() {
+        return 70;
     }
 
     @Override
     public Tile getTile() {
         return EARTH;
+    }
+
+    @Override
+    public Integer getHabitationPercentage() {
+        return 2;
+    }
+
+    @Override
+    public Integer getHabitationMaximum() {
+        return 10;
     }
 }
